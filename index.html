@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tiny Glade — Meadow &amp; Stone Diorama</title>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23293136'/%3E%3Cpath d='M7 17L16 7l9 10h-2v8H9v-8H7z' fill='%23d9c8af'/%3E%3Cpath d='M6 17.5L16 6.5l10 11' stroke='%23b8573b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Crect x='14' y='19' width='4' height='6' rx='2' fill='%235a4332'/%3E%3C/svg%3E"
+  />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #1f2528;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #glade-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+      outline: none;
+    }
+    #hud-root {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    #loading-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #232a2d;
+      color: #ede4d3;
+      transition: opacity 0.38s ease, visibility 0.38s ease;
+    }
+    #loading-overlay.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #loading-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #f4ecdc;
+    }
+    #loading-status {
+      font-size: 0.875rem;
+      color: #b8b0a0;
+      max-width: 420px;
+      text-align: center;
+      line-height: 1.45;
+    }
+    #loading-overlay.has-error #loading-status {
+      color: #f0947d;
+    }
+  </style>
+  <link rel="stylesheet" href="./dist/glade.css" />
+</head>
+<body>
+  <canvas id="glade-canvas" tabindex="0" aria-label="Tiny Glade 3D Diorama Canvas"></canvas>
+  <div id="hud-root"></div>
+  <div id="loading-overlay" role="status" aria-live="polite">
+    <div id="loading-title">Tiny Glade</div>
+    <div id="loading-status">Shaping meadow, stone courses, and water…</div>
+  </div>
+  <script defer src="./dist/glade.js"></script>
+</body>
+</html>

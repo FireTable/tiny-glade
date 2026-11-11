@@ -1,0 +1,799 @@
+/* ============================================================================
+ * Tiny Glade — Tactile Parchment & Warm Stone HUD Stylesheet
+ * Functional, high-contrast, accessible controls with zero decorative clutter.
+ * ============================================================================ */
+
+:root {
+  --tg-surface: rgba(246, 240, 228, 0.90);
+  --tg-surface-strong: rgba(251, 247, 239, 0.96);
+  --tg-surface-hover: rgba(235, 226, 210, 0.92);
+  --tg-surface-inset: rgba(224, 214, 197, 0.72);
+  --tg-border: rgba(74, 59, 44, 0.18);
+  --tg-border-strong: rgba(74, 59, 44, 0.32);
+  --tg-ink: #29221b;
+  --tg-ink-muted: #5e5143;
+  --tg-ink-soft: #786a5a;
+  --tg-accent: #a84b31;
+  --tg-accent-hover: #913d25;
+  --tg-accent-ink: #fcf8f2;
+  --tg-danger: #9e3528;
+  --tg-shadow: 0 8px 24px rgba(24, 19, 14, 0.18), 0 1px 3px rgba(24, 19, 14, 0.12);
+  --tg-shadow-sm: 0 3px 10px rgba(24, 19, 14, 0.14);
+  --tg-radius-lg: 14px;
+  --tg-radius-md: 10px;
+  --tg-radius-sm: 7px;
+  --tg-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.tg-hud [hidden] {
+  display: none !important;
+}
+
+.tg-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tg-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  font-family: var(--tg-font);
+  color: var(--tg-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tg-interactive {
+  pointer-events: auto;
+}
+
+/* ============================================================================
+ * Shared Bar & Tactile Button Primitives
+ * ============================================================================ */
+
+.tg-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--tg-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-lg);
+  box-shadow: var(--tg-shadow);
+}
+
+.tg-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--tg-border);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.tg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--tg-radius-sm);
+  background: transparent;
+  color: var(--tg-ink);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease, transform 0.08s ease;
+}
+
+.tg-btn-icon-only {
+  width: 32px;
+  padding: 0;
+}
+
+.tg-btn:hover:not(:disabled) {
+  background: var(--tg-surface-hover);
+  border-color: var(--tg-border);
+}
+
+.tg-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.tg-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.tg-btn.is-active,
+.tg-btn-primary {
+  background: var(--tg-accent);
+  color: var(--tg-accent-ink);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.tg-btn.is-active:hover:not(:disabled),
+.tg-btn-primary:hover:not(:disabled) {
+  background: var(--tg-accent-hover);
+  color: var(--tg-accent-ink);
+}
+
+.tg-btn-icon {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.tg-btn-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tg-hud button:focus-visible,
+.tg-hud select:focus-visible,
+.tg-hud input:focus-visible {
+  outline: 2px solid var(--tg-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+ * 1. Top-Left Scene & History Bar
+ * ============================================================================ */
+
+.tg-top-left {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.tg-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tg-select {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 32px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-sm);
+  background-color: var(--tg-surface-strong);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a3c2e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  color: var(--tg-ink);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background-color 0.14s ease;
+}
+
+.tg-select:hover {
+  border-color: var(--tg-border-strong);
+  background-color: #fffdf9;
+}
+
+/* ============================================================================
+ * 2. Top-Right Atmosphere, Camera, Drawer & Perf Readout
+ * ============================================================================ */
+
+.tg-top-right-wrap {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.tg-time-group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-left: 4px;
+}
+
+.tg-sky-icon {
+  display: inline-flex;
+  width: 17px;
+  height: 17px;
+  color: var(--tg-accent);
+  flex-shrink: 0;
+}
+
+.tg-sky-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tg-time-readout {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--tg-ink);
+  min-width: 37px;
+}
+
+.tg-time-slider {
+  width: 92px;
+}
+
+.tg-time-presets {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.tg-chip {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--tg-border);
+  border-radius: 6px;
+  background: var(--tg-surface-inset);
+  color: var(--tg-ink-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+}
+
+.tg-chip:hover {
+  background: var(--tg-surface-strong);
+  color: var(--tg-ink);
+}
+
+.tg-chip.is-active {
+  background: var(--tg-accent);
+  color: var(--tg-accent-ink);
+  border-color: transparent;
+}
+
+/* Range Sliders */
+.tg-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(84, 68, 52, 0.22);
+  cursor: pointer;
+}
+
+.tg-slider:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tg-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--tg-accent);
+  border: 2px solid #fcf8f2;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  transition: transform 0.1s ease;
+}
+
+.tg-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+
+.tg-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--tg-accent);
+  border: 2px solid #fcf8f2;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+}
+
+/* Collapsible Atmosphere & Lens Drawer */
+.tg-drawer {
+  width: 286px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--tg-surface-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-lg);
+  box-shadow: var(--tg-shadow);
+}
+
+.tg-drawer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tg-drawer-slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tg-drawer-slider-row .tg-slider {
+  width: 100%;
+}
+
+.tg-drawer-slider-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tg-drawer-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tg-ink);
+}
+
+.tg-drawer-val {
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--tg-ink-muted);
+}
+
+.tg-drawer-sep {
+  border: 0;
+  border-top: 1px solid var(--tg-border);
+  margin: 2px 0;
+}
+
+/* Segmented Controls & Toggle Pills */
+.tg-seg-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--tg-surface-inset);
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-sm);
+}
+
+.tg-seg-btn {
+  height: 25px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--tg-ink-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.tg-seg-btn:hover {
+  color: var(--tg-ink);
+}
+
+.tg-seg-btn.is-active {
+  background: var(--tg-surface-strong);
+  color: var(--tg-ink);
+  box-shadow: 0 1px 3px rgba(24, 19, 14, 0.14);
+}
+
+.tg-toggle-pill {
+  height: 27px;
+  padding: 0 10px;
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-sm);
+  background: var(--tg-surface-inset);
+  color: var(--tg-ink-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+}
+
+.tg-toggle-pill:hover {
+  background: var(--tg-surface-strong);
+  color: var(--tg-ink);
+}
+
+.tg-toggle-pill.is-active {
+  background: var(--tg-accent);
+  color: var(--tg-accent-ink);
+  border-color: transparent;
+}
+
+/* Real Performance Readout */
+.tg-perf-readout {
+  padding: 4px 10px;
+  background: rgba(36, 31, 26, 0.76);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 245, 230, 0.14);
+  border-radius: 8px;
+  color: #efe7d8;
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  box-shadow: var(--tg-shadow-sm);
+}
+
+/* ============================================================================
+ * 3. Bottom-Center Tool Dock & Contextual Sub-Options Popover
+ * ============================================================================ */
+
+.tg-bottom-center {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 24px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.tg-walk-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--tg-surface-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-md);
+  box-shadow: var(--tg-shadow-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tg-ink);
+}
+
+.tg-sub-popover {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: var(--tg-surface-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-md);
+  box-shadow: var(--tg-shadow);
+}
+
+.tg-sub-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--tg-accent);
+  padding-right: 4px;
+}
+
+.tg-sub-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--tg-ink-muted);
+}
+
+.tg-swatch-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tg-swatch {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--swatch-color, #b8573b);
+  border: 2px solid rgba(42, 35, 28, 0.22);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.tg-swatch:hover {
+  transform: scale(1.1);
+}
+
+.tg-swatch.is-active {
+  border-color: #29221b;
+  box-shadow: 0 0 0 2px #fbf7ef, 0 0 0 4px var(--tg-accent);
+  transform: scale(1.08);
+}
+
+.tg-wall-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--tg-border);
+  border-radius: 6px;
+  background: var(--tg-surface-inset);
+  color: var(--tg-ink-muted);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.tg-wall-pill:hover {
+  background: var(--tg-surface-strong);
+  color: var(--tg-ink);
+}
+
+.tg-wall-pill.is-active {
+  background: #3a3128;
+  color: #fcf8f2;
+  border-color: #29221b;
+}
+
+.tg-wall-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.tg-inline-slider {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.tg-sub-range {
+  width: 96px;
+}
+
+.tg-sub-val {
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--tg-ink);
+  min-width: 38px;
+}
+
+.tg-sub-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid rgba(158, 53, 40, 0.3);
+  border-radius: 6px;
+  background: rgba(158, 53, 40, 0.08);
+  color: var(--tg-danger);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tg-sub-delete-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.tg-sub-delete-btn:hover {
+  background: var(--tg-danger);
+  color: #fff;
+}
+
+/* Ergonomic Tool Dock */
+.tg-dock {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  background: var(--tg-surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--tg-border);
+  border-radius: 16px;
+  box-shadow: var(--tg-shadow);
+  transition: opacity 0.18s ease;
+}
+
+.tg-dock.is-strolling {
+  opacity: 0.65;
+}
+
+.tg-dock.is-strolling:hover {
+  opacity: 1;
+}
+
+.tg-tool-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 56px;
+  height: 52px;
+  padding: 4px 2px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--tg-ink);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.14s ease, color 0.14s ease, transform 0.1s ease, border-color 0.14s ease;
+}
+
+.tg-tool-btn:hover {
+  background: var(--tg-surface-hover);
+  border-color: var(--tg-border);
+}
+
+.tg-tool-btn:active {
+  transform: translateY(1px);
+}
+
+.tg-tool-btn.is-active {
+  background: var(--tg-accent);
+  color: var(--tg-accent-ink);
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 3px 10px rgba(168, 75, 49, 0.34);
+  transform: translateY(-2px);
+}
+
+.tg-tool-icon {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+}
+
+.tg-tool-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tg-tool-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.tg-tool-key {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 700;
+  opacity: 0.55;
+  line-height: 1;
+}
+
+.tg-tool-btn.is-active .tg-tool-key {
+  opacity: 0.85;
+}
+
+/* ============================================================================
+ * 4. Photo Mode Clean HUD Hide & Floating Exit/Capture Pill
+ * ============================================================================ */
+
+.tg-hud.is-photo-mode .tg-top-left,
+.tg-hud.is-photo-mode .tg-top-right-wrap,
+.tg-hud.is-photo-mode .tg-bottom-center {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tg-photo-pill {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: rgba(246, 240, 228, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--tg-border);
+  border-radius: var(--tg-radius-lg);
+  box-shadow: var(--tg-shadow);
+}
+
+/* ============================================================================
+ * 5. Subtle Status Toast
+ * ============================================================================ */
+
+.tg-toast {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translate(-50%, -6px);
+  padding: 7px 14px;
+  background: rgba(41, 34, 27, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 246, 232, 0.16);
+  border-radius: 999px;
+  color: #f8f2e6;
+  font-size: 12.5px;
+  font-weight: 500;
+  box-shadow: var(--tg-shadow-sm);
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+
+.tg-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ============================================================================
+ * Responsive Refinements for Compact Viewports
+ * ============================================================================ */
+
+@media (max-width: 1220px) {
+  .tg-time-presets {
+    display: none;
+  }
+  .tg-top-left .tg-btn-label,
+  .tg-top-right .tg-btn-label {
+    display: none;
+  }
+  .tg-top-left .tg-btn,
+  .tg-top-right .tg-btn {
+    width: 32px;
+    padding: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .tg-tool-btn {
+    width: 46px;
+    height: 46px;
+  }
+  .tg-tool-label {
+    display: none;
+  }
+}

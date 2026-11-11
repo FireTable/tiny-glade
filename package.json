@@ -1,0 +1,37 @@
+{
+  "name": "tiny-glade",
+  "version": "1.0.0",
+  "private": false,
+  "description": "One-prompt Gemini 4 Carbon showcase — 100% browser-native AAA Tiny Glade 3D diorama builder in WebGL2 HDR (procedural stone arches & bridges, 195k wind grass, GTAO, Tilt-Shift DoF, procedural WebAudio), runnable from a single HTML file.",
+  "type": "module",
+  "license": "MIT",
+  "author": "FireTable",
+  "homepage": "https://cdn.firetable.tech/file/tiny-glade-aaa.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FireTable/tiny-glade.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FireTable/tiny-glade/issues"
+  },
+  "keywords": [
+    "tiny-glade",
+    "threejs",
+    "webgl2",
+    "procedural-generation",
+    "pbr",
+    "gtao",
+    "browser-game",
+    "single-file-html",
+    "gemini-4-carbon",
+    "ai-generated"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "python3 -m http.server 8080"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.170.0"
+  }
+}
